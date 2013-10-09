@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Project 1</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+</head>
+<body>
+  <p class="story">The description is loading...</p>
+
+<script>
+$(document).ready(
+  function() {
+    
+    $.getJSON("https://graph.facebook.com/cocacola", function(arr) {
+      $('p.story').html("Here's description of cocacola: "+ arr.description);
+    }, "json");
+
+  }
+);
+
+
+</script>
+</body>
+
+</html>
