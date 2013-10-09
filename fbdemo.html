@@ -10,11 +10,9 @@
 <script>
 $(document).ready(
   function() {
-    
     $.getJSON("https://graph.facebook.com/cocacola", function(arr) {
       $('p.story').html("Here's description of cocacola: "+ arr.description);
     }, "json");
-
   }
 );
 </script>
