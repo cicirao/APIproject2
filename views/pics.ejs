@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+< html>
+	<head>
+		<title>Pictures</title>
+		<meta charset="UTF-8">
+		<link href="/css/main.css" rel="stylesheet" type="text/css">
+		<link href="/css/content.css" rel="stylesheet" type="text/css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	</head>
+	<body>
+		<div id="page">
+			<header>
+				<nav>
+					<h1><a href="content.html">Care One</a></h1>
+					<h2><a href="pics.html">Pictures</a></h2>
+					<ul id="snsstat">
+						<li class="stat"><a href="#"><img src="/imgs/tw-off.png" ></a></li>
+						<li class="stat"><a href="#"><img src="/imgs/fb-on.png" ></a></li>
+					</ul>
+				</nav>
+			</header>
+			<div>
+				<ul id="pics">
+					<li>
+						<img class="photowall" src="https://pbs.twimg.com/media/BYC8ryiCEAAyDQX.jpg:large">
+					</li>
+					<li>
+						<img class="photowall" src="https://pbs.twimg.com/media/BXzEg-YCYAECCSI.jpg:large">
+					</li>
+					<li>
+						<img class="photowall" src="https://pbs.twimg.com/media/BXjyvHECMAAAdG0.jpg:large">
+					</li>
+					<li>
+						<img class="photowall" src="https://pbs.twimg.com/media/BXJbM6DCEAAAElL.jpg:large">
+					</li>
+					<li>
+						<img class="photowall" src="https://pbs.twimg.com/media/BW_PbUyCEAEoB3H.jpg:large">
+					</li>
+					<li>
+						<img class="photowall" src="https://pbs.twimg.com/media/BWv4Wt7CQAAQGjF.jpg:large">
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript">
+	var w = $('.photowall').width, h = $('.photowall').height;
+	window.onload = function() {
+		$('#pics>li').css('height', $('#pics>li').width());
+		// if (w > h) {
+		// 	$('.photowall').css('height', '100%');
+		// } else {
+		// 	$('.photowall').css('width', '100%');
+		// };
+	};
+		</script>
+	</body>
+</html>
