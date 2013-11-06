@@ -2,11 +2,16 @@
 <html>
 <head>
   <meta charset="utf-8">
+<<<<<<< HEAD
   <title>Project 1</title>
+=======
+  <title>Project 2</title>
+>>>>>>> c8ee78b43c8b1809518774e5dbc0977a2dbc6867
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 </head>
 <body>
   <p class="story">The description is loading...</p>
+<<<<<<< HEAD
 
 <script>
 $(document).ready(
@@ -24,3 +29,16 @@ $(document).ready(
 </body>
 
 </html>
+=======
+<script>
+$(document).ready(
+  function() {
+    $.getJSON("https://graph.facebook.com/cocacola", function(arr) {
+      $('p.story').html("Here's description of cocacola: "+ arr.description);
+    }, "json");
+  }
+);
+</script>
+</body>
+</html>
+>>>>>>> c8ee78b43c8b1809518774e5dbc0977a2dbc6867
