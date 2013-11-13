@@ -11,32 +11,23 @@
     <div id="page">
       <header>
         <nav>
-          <h1><a href="content.html">Care One</a></h1>
-          <h2><a href="pics.html">Pictures</a></h2>
-          <ul id="snsstat">
-            <li class="stat"><a href="/auth/twitter"><img src="/imgs/tw-off.png" ></a></li>
-            <li class="stat"><a href="/tweet"><img src="/imgs/fb-on.png" ></a></li>
-          </ul>
+          <h1>Care One</h1>
+          <h2><a href="/pics">Pictures</a></h2>
         </nav>
       </header>
       <div id="main">
         <ul id="me">
           <li>
-            <img src="">
-            <section>
-              <h3 name="name">
-                <%= user.profile.displayName %>
-              </h3>
-              <p class="story">description</p>
-              <footer>
-                <div class="source">From <%= user.profile.provider %></div>
-                <small>created_at</small>
-              </footer>
               <form id="search">
-                <input type="text" name="search">
-                <button type="submit">search</button>
+                <input type="text" name="search" value="ciciraoxi">
+                <button type="submit">GET TWEET</button>
               </form>
-            </section>
+          </li>
+          <li>
+              <form id="fb">
+                <input type="text" name="fb">
+                <button type="submit">GET FB</button>
+              </form>
           </li>
         </ul>
         <ul id="users">

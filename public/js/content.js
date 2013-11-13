@@ -57,6 +57,7 @@
       '       <h3 name="name">{name}'+
       '       </h3>'+
       '       <p class="story">{text}</p>'+
+      '     <small class="time">{time}</small>'+
       '     </section>'+
       ' </li>'
   var feedList = $('#feeds')
@@ -65,8 +66,9 @@
     feedList.html('')
     $.each(feeds, function(i, feed) {
       html = feedHtml
-        .replace('{name}', feed.created_at)
+        .replace('{name}', feed.user.name)
         .replace('{text}', feed.text)
+        .replace('{time}', feed.created_at.slice(4, 16))
       feedList.append(html)
     })
   }
