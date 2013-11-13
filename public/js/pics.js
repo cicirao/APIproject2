@@ -1,14 +1,10 @@
-;(function() {
+﻿;(function() {
 
   $('#search').on('submit', function(e) {
     e.preventDefault()
     var searchQuery = $(this).find('input:text').val()
-	if (this.value = 'twt') {
     getUser(searchQuery)
-    getFeed(searchQuery) 
-	} else if (this.value = 'twp') {
-	  getPic(searchQuery)
-	}
+    getFeed(searchQuery)
   })
 
   var urlPrefix = '/api'
@@ -86,33 +82,6 @@
       feedList.append(html)
     })
 	
-  }
-  
-function getPic(name) {
-    name = encodeURIComponent(name)
-    var url = feedUrl.replace('{query}', name)
-    $.get(url).done(function(res) {
-      console.log(res)
-      renderPic(res)
-    })
-  }
-
-  var picHtml =
-      ' <li>'+
-      '     <section>'+
-      '       <img src="#" />'+
-      '     </section>'+
-      ' </li>'
-  var picList = $('#pics')
-
-  function renderPic(pics) {
-    picList.html('')
-    $.each(pics, function(i, pic) {
-        html = picHtml
-          .replace('#', pic.entities.media[0].media_url)
-      picList.append(html)
-    })
-    
   }
 
 }())

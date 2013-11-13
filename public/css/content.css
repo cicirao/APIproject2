@@ -84,6 +84,7 @@ button {
 img {
   float:left;
   border: 1px solid #ccc;
+  width:100%;
 }
 section {
   width: 60%;
@@ -113,6 +114,7 @@ footer {
 small {
   float: left;
   color: #aaa;
+  margin-top: .5em;
 }
 #users {
   width: 100%;

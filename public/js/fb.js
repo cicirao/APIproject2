@@ -1,16 +1,11 @@
 ;(function() {
 
-  $('#search').on('submit', function(e) {
+  $('#fb').on('submit', function(e) {
     e.preventDefault()
     var searchQuery = $(this).find('input:text').val()
-	if (this.value = 'twt') {
     getUser(searchQuery)
     getFeed(searchQuery) 
-	} else if (this.value = 'twp') {
-	  getPic(searchQuery)
-	}
   })
-
   var urlPrefix = '/api'
   var searchUrl = urlPrefix + '/users/show.json?screen_name={query}'
   var feedUrl = urlPrefix
@@ -109,7 +104,7 @@ function getPic(name) {
     picList.html('')
     $.each(pics, function(i, pic) {
         html = picHtml
-          .replace('#', pic.entities.media[0].media_url)
+          .replace('#', feed.entities.media[0].media_url)
       picList.append(html)
     })
     

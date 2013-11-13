@@ -7,7 +7,8 @@
 	tw,
 	FacebookStrategy = require('passport-facebook').Strategy,
 	TwitterStrategy = require('passport-twitter').Strategy,
-	user = { id: "abc"};
+	user = { id: "abc"},
+	User = { id: "cba"};
 
 var FACEBOOK_APP_ID = "184163791771170";
 var FACEBOOK_APP_SECRET = "5ca092b4ca6a2265c1842c36bf2eb64c";
@@ -27,14 +28,14 @@ function initTwitterOauth() {
   );
 }
 
-function initFacebookOauth() {
-	var OAuth2 = require('oauth').OAuth2;
+/*function initFacebookOauth() {
+	var OAuth2 = require('oauth/lib/oauth2').OAuth2;
 	oa = new OAuth2(
-		server.config.keys.twitter.consumerKey,
-      twitterConsumerSecret,
-      'https://api.twitter.com/',
-      null,
-      'oauth2/token',
+		FACEBOOK_APP_ID,
+    FACEBOOK_APP_SECRET,
+      'https://graph.facebook.com/',
+      'oauth/authorize',
+      'oauth/access_token',
       null);
     oauth2.getOAuthAccessToken(
       '',
@@ -43,7 +44,7 @@ function initFacebookOauth() {
         console.log('bearer: ',access_token);
         done();
       });
-}
+}*/
 
 //这个获取tweet的函数不会写，得不到json,也输出不了名字、描述、时间、来自t还是f
 function getTweet(user, method, cb) {
@@ -74,18 +75,19 @@ passport.deserializeUser(function(id, done) {
 
 
 //Use the FacebookStrategy within Passport.
-passport.use(new FacebookStrategy({
+/*passport.use(new FacebookStrategy({
 		clientID: FACEBOOK_APP_ID,
 		clientSecret: FACEBOOK_APP_SECRET,
 		callbackURL: "http://localhost:3000/auth/facebook/callback"
 	},
 	function(accessToken, refreshToken, profile, done) {
-    user.accessToken = accessToken;
-    user.refreshToken = refreshToken;
-    user.profile = profile;
-    done();
+    User.accessToken = accessToken;
+    User.refreshToken = refreshToken;
+    User.profile = profile;
+    initFacebookOauth();
+    done(null, User);
 	}
-));
+));*/
 
 //Use the TwitterStrategy within Passport.
 passport.use(new TwitterStrategy({
@@ -156,8 +158,11 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 
 //GET /auth/facebook/callback
 app.get('/auth/facebook/callback',
-	passport.authenticate('facebook', { failureRedirect: '/login' }),
+	passport.authenticate('facebook', { 
+		failureRedirect: '/login' 
+  }),
 	function(req, res) {
+		console.log(req)
   	res.redirect('/content');
 });
 
@@ -175,19 +180,6 @@ app.get('/auth/twitter/callback',
   	res.redirect('/content');
   }
 );
-
-//tweet
-/*app.get('/tweet', function (req, res) {
-	makeTweet(function(error, data) {
-			if(error) {
-				console.log(require('sys').inspect(error));
-				res.end('bad stuff happened');
-			} else {
-			  console.log(data);
-			  res.end('go check your tweets!');
-			}
-	});
-});*/
 
 
 app.get('/logout', function(req, res){
