@@ -3,12 +3,16 @@
   $('#search').on('submit', function(e) {
     e.preventDefault()
     var searchQuery = $(this).find('input:text').val()
-	if (this.value = 'twt') {
-    getUser(searchQuery)
-    getFeed(searchQuery) 
-	} else if (this.value = 'twp') {
-	  getPic(searchQuery)
-	}
+    $('button').click(function() {
+      if ($(this).val() === 'twt') {
+        getUser(searchQuery)
+        getFeed(searchQuery) 
+      } else if ($(this).val() === 'twp') {
+        getUser(searchQuery)
+        getPic(searchQuery)
+      }
+      console.log($(this).val())
+    })
   })
 
   var urlPrefix = '/api'
@@ -47,6 +51,7 @@
 
 
   function getFeed(name) {
+    picList.html('')
     name = encodeURIComponent(name)
     var url = feedUrl.replace('{query}', name)
     $.get(url).done(function(res) {
@@ -70,25 +75,25 @@
   function renderFeed(feeds) {
     feedList.html('')
     $.each(feeds, function(i, feed) {
-	  if (feeds[i].entities.media) {
+  	  if (feeds[i].entities.media) {
         html = feedHtml
           .replace('{name}', feed.user.name)
-		  .replace('{text}', feed.text)
+		      .replace('{text}', feed.text)
           .replace('#', feed.entities.media[0].media_url)
           .replace('{time}', feed.created_at.slice(4, 16))
-	  } else {
-	    html = feedHtml
+  	  } else {
+	      html = feedHtml
           .replace('{name}', feed.user.name)
           .replace('{text}', feed.text)
           .replace('{time}', feed.created_at.slice(4, 16))
-		$('img[src="#"]').remove()
-	  }
+  	  }
+      $('img[src="#"]').remove()
       feedList.append(html)
-    })
-	
+    })	
   }
   
-function getPic(name) {
+  function getPic(name) {
+    feedList.html('')
     name = encodeURIComponent(name)
     var url = feedUrl.replace('{query}', name)
     $.get(url).done(function(res) {
@@ -99,20 +104,21 @@ function getPic(name) {
 
   var picHtml =
       ' <li>'+
-      '     <section>'+
       '       <img src="#" />'+
-      '     </section>'+
       ' </li>'
   var picList = $('#pics')
 
   function renderPic(pics) {
     picList.html('')
     $.each(pics, function(i, pic) {
+      if (pics[i].entities.media) {
         html = picHtml
           .replace('#', pic.entities.media[0].media_url)
-      picList.append(html)
+      } else {
+        html = picHtml
+      }
+    $('img[src="#"]').remove()
+    picList.append(html)
     })
-    
   }
-
 }())
