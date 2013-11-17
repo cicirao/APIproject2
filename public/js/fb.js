@@ -3,13 +3,22 @@
   $('#fb').on('submit', function(e) {
     e.preventDefault()
     var searchQuery = $(this).find('input:text').val()
-    getUser(searchQuery)
-    getFeed(searchQuery) 
+    $('button').click(function() {
+      if ($(this).val() === 'fbf') {
+        getUser(searchQuery)
+        getFeed(searchQuery) 
+      } else if ($(this).val() === 'fbp') {
+        getUser(searchQuery)
+        getPic(searchQuery)
+      }
+      console.log($(this).val())
+    })
   })
+
   var urlPrefix = '/api'
-  var searchUrl = urlPrefix + '/users/show.json?screen_name={query}'
+  var searchUrl = urlPrefix + '/{query}?fields=name'
   var feedUrl = urlPrefix
-        + '/statuses/user_timeline.json?screen_name={query}'
+        + '/{query}?fields=feed'
 
   function getUser(name) {
     name = encodeURIComponent(name)
@@ -22,11 +31,9 @@
 
   var userHtml =
         ' <li>'+
-        '   <img src="{avatar}">'+
         '   <section>'+
         '     <h3 name="name">{name}'+
         '     </h3>'+
-        '     <p class="story">{text}</p>'+
         '   </section>'+
         ' </li>'
   var usersList = $('#users')
@@ -34,14 +41,13 @@
   function renderUser(user) {
     usersList.html('')
     var html = userHtml
-      .replace('{avatar}', user.profile_image_url)
       .replace('{name}', user.name)
-      .replace('{text}', user.description)
     usersList.append(html)
   }
 
 
   function getFeed(name) {
+    picList.html('')
     name = encodeURIComponent(name)
     var url = feedUrl.replace('{query}', name)
     $.get(url).done(function(res) {
@@ -64,26 +70,27 @@
 
   function renderFeed(feeds) {
     feedList.html('')
+    var feeds = feeds.feed.data
     $.each(feeds, function(i, feed) {
-	  if (feeds[i].entities.media) {
+      if (feeds[i].picture) {
         html = feedHtml
-          .replace('{name}', feed.user.name)
-		  .replace('{text}', feed.text)
-          .replace('#', feed.entities.media[0].media_url)
-          .replace('{time}', feed.created_at.slice(4, 16))
-	  } else {
-	    html = feedHtml
-          .replace('{name}', feed.user.name)
-          .replace('{text}', feed.text)
-          .replace('{time}', feed.created_at.slice(4, 16))
-		$('img[src="#"]').remove()
-	  }
+          .replace('{name}', feed.from.name)
+          .replace('{text}', feed.message)
+          .replace('#', feed.picture)
+          .replace('{time}', feed.created_time.slice(4, 16))
+      } else {
+        html = feedHtml
+          .replace('{name}', feed.from.name)
+          .replace('{text}', feed.message)
+          .replace('{time}', feed.created_time.slice(4, 16))
+      }
+      $('img[src="#"]').remove()
       feedList.append(html)
-    })
-	
+    })  
   }
   
-function getPic(name) {
+  function getPic(name) {
+    feedList.html('')
     name = encodeURIComponent(name)
     var url = feedUrl.replace('{query}', name)
     $.get(url).done(function(res) {
@@ -94,20 +101,22 @@ function getPic(name) {
 
   var picHtml =
       ' <li>'+
-      '     <section>'+
       '       <img src="#" />'+
-      '     </section>'+
       ' </li>'
   var picList = $('#pics')
 
   function renderPic(pics) {
     picList.html('')
+    var pics = pics.feed.data
     $.each(pics, function(i, pic) {
+      if (pics[i].picture) {
         html = picHtml
-          .replace('#', feed.entities.media[0].media_url)
+          .replace('#', pic.picture)
+      } else {
+        html = picHtml
+      }
+      $('img[src="#"]').remove()
       picList.append(html)
     })
-    
   }
-
 }())

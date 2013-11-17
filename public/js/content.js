@@ -117,8 +117,8 @@
       } else {
         html = picHtml
       }
-    $('img[src="#"]').remove()
-    picList.append(html)
+      $('img[src="#"]').remove()
+      picList.append(html)
     })
   }
 }())

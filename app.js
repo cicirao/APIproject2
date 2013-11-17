@@ -4,7 +4,7 @@
 	path = require('path'),
 	http = require('http'),
 	oa,
-	tw,
+	oa2,
 	FacebookStrategy = require('passport-facebook').Strategy,
 	TwitterStrategy = require('passport-twitter').Strategy,
 	user = { id: "abc"},
@@ -28,23 +28,40 @@ function initTwitterOauth() {
   );
 }
 
-/*function initFacebookOauth() {
+function initFacebookOauth() {
 	var OAuth2 = require('oauth/lib/oauth2').OAuth2;
-	oa = new OAuth2(
+	oa2 = new OAuth2(
 		FACEBOOK_APP_ID,
     FACEBOOK_APP_SECRET,
-      'https://graph.facebook.com/',
-      'oauth/authorize',
-      'oauth/access_token',
-      null);
-    oauth2.getOAuthAccessToken(
-      '',
-      {'grant_type':'client_credentials'},
-      function (e, access_token, refresh_token, results){
-        console.log('bearer: ',access_token);
-        done();
-      });
-}*/
+    'https://graph.facebook.com/',
+    'oauth/authorize',
+    'oauth/access_token',
+    null
+  );
+  oa2.getOAuthAccessToken(
+    '',
+    {'grant_type':'client_credentials'},
+    function (e, access_token, refresh_token, results){
+      console.log('bearer: ',access_token);
+      done();
+    }
+  );
+}
+
+function getFacebook(user, method, cb) {
+	oa2.get(
+		"https://graph.facebook.com" + method,
+		User.accessToken,
+		function(err,data){
+      if(err){
+        console.log(err);
+        cb(err);
+      } else {
+        cb(JSON.parse(data));
+      }
+    }
+	);
+}
 
 //这个获取tweet的函数不会写，得不到json,也输出不了名字、描述、时间、来自t还是f
 function getTweet(user, method, cb) {
@@ -73,9 +90,18 @@ passport.deserializeUser(function(id, done) {
 	done(null, user);
 });
 
+passport.serializeUser(function(_User, done) {
+	User.id = Math.random().toString();
+	done(null, User.id);
+});
+
+passport.deserializeUser(function(id, done) {
+	done(null, User);
+});
+
 
 //Use the FacebookStrategy within Passport.
-/*passport.use(new FacebookStrategy({
+passport.use(new FacebookStrategy({
 		clientID: FACEBOOK_APP_ID,
 		clientSecret: FACEBOOK_APP_SECRET,
 		callbackURL: "http://localhost:3000/auth/facebook/callback"
@@ -87,7 +113,7 @@ passport.deserializeUser(function(id, done) {
     initFacebookOauth();
     done(null, User);
 	}
-));*/
+));
 
 //Use the TwitterStrategy within Passport.
 passport.use(new TwitterStrategy({
@@ -137,12 +163,8 @@ function ensureAuthenticated(req, res, next) {
 		console.log("err!");
 }
 
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
-});
-
 app.get('/content', function(req, res){
-		res.render('content', { user: req.user });
+	res.render('content', { user: req.user });
 });
 
 app.get('/api/*', function(req, res) {
@@ -151,6 +173,9 @@ app.get('/api/*', function(req, res) {
   getTweet(req.user, query, function(tweetRes) {
     res.send(tweetRes)
   })
+  /*getFacebook(req.user, query, function(facebookRes) {
+  	res.send(facebookRes)
+  })*/
 })
 
 //GET /auth/facebook
