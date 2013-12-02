@@ -118,6 +118,7 @@ small {
 }
 #users {
   width: 100%;
+  height: 5em;
 }
 #users li img {
   width: 48px;
@@ -136,7 +137,4 @@ small {
   float: left;
   overflow: hidden;
   max-height: 15em;
-}
-.photowall{
-  cursor:pointer;
 }

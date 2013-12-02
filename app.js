@@ -29,29 +29,20 @@ function initTwitterOauth() {
 }
 
 function initFacebookOauth() {
-	var OAuth2 = require('oauth/lib/oauth2').OAuth2;
+	var OAuth2 = require('oauth').OAuth2;
 	oa2 = new OAuth2(
 		FACEBOOK_APP_ID,
     FACEBOOK_APP_SECRET,
     'https://graph.facebook.com/',
     'oauth/authorize',
-    'oauth/access_token',
-    null
-  );
-  oa2.getOAuthAccessToken(
-    '',
-    {'grant_type':'client_credentials'},
-    function (e, access_token, refresh_token, results){
-      console.log('bearer: ',access_token);
-      done();
-    }
+    'oauth/access_token'
   );
 }
 
 function getFacebook(user, method, cb) {
 	oa2.get(
 		"https://graph.facebook.com" + method,
-		User.accessToken,
+		user.accessToken,
 		function(err,data){
       if(err){
         console.log(err);
@@ -63,7 +54,6 @@ function getFacebook(user, method, cb) {
 	);
 }
 
-//这个获取tweet的函数不会写，得不到json,也输出不了名字、描述、时间、来自t还是f
 function getTweet(user, method, cb) {
 	oa.get(
 		"https://api.twitter.com/1.1" + method,
@@ -90,13 +80,13 @@ passport.deserializeUser(function(id, done) {
 	done(null, user);
 });
 
-passport.serializeUser(function(_User, done) {
-	User.id = Math.random().toString();
-	done(null, User.id);
+passport.serializeUser(function(_user, done) {
+	user.id = Math.random().toString();
+	done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-	done(null, User);
+	done(null, user);
 });
 
 
@@ -107,11 +97,11 @@ passport.use(new FacebookStrategy({
 		callbackURL: "http://localhost:3000/auth/facebook/callback"
 	},
 	function(accessToken, refreshToken, profile, done) {
-    User.accessToken = accessToken;
-    User.refreshToken = refreshToken;
-    User.profile = profile;
+    user.accessToken = accessToken;
+    user.refreshToken = refreshToken;
+    user.profile = profile;
     initFacebookOauth();
-    done(null, User);
+    done(null, user);
 	}
 ));
 
@@ -173,13 +163,18 @@ app.get('/api/*', function(req, res) {
   getTweet(req.user, query, function(tweetRes) {
     res.send(tweetRes)
   })
-  /*getFacebook(req.user, query, function(facebookRes) {
-  	res.send(facebookRes)
-  })*/
+})
+
+app.get('/graph/*', function(req, res) {
+	console.log(req)
+	var query = req.url.replace('/graph', '')
+	getFacebook(req.user, query, function(facebookRes) {
+		res.send(facebookRes)
+	})
 })
 
 //GET /auth/facebook
-app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['read_stream', 'friends_photos']}));
 
 //GET /auth/facebook/callback
 app.get('/auth/facebook/callback',
