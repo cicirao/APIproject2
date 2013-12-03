@@ -5,7 +5,7 @@ This is a Web Application written by nodejs.
 
 It could get a collection or a mashup of the lastest updates of one person that you care about, from different SNS platform. At this time, it could get data from Twitter and Facebook.
 
-By using this web application, you can get a wall of tweets and Facebook stories here. Everything is about the person. 
+By using this web application, you can get a wall of tweets and Facebook stories as well as a wall of photoes here. Everything is about the person. 
 
 
 The API that I used: 
@@ -16,39 +16,39 @@ The API that I used:
 
 
 
-get user data from the resource:
+Get user data from the resource:
 
 
 https://api.twitter.com/1.1/users/show.json
 
     
     
-get timeline from the resource:
+Get timeline from the resource:
 
 
 https://api.twitter.com/1.1/statuses/user_timeline.json
 
 
 
-###The graph api of Facebook. 
+###The Graph API of Facebook. 
 
 
 
-get user data:
+Get user data:
 
 
 https://graph.facebook.com/{query}?fields=name,picture
 
 
 
-get feeds:
+Get feeds:
 
 
 https://graph.facebook.com/{query}?fields=posts
 
 
 
-get photo wall:
+Get photo wall:
 
 
 https://graph.facebook.com/{query}?fields=photos
